@@ -12,18 +12,31 @@ def manage_user(prompt: str) -> True:
             AUTHENTICATED = True
             USER = username
     elif prompt == "login":
-        pass
-    elif prompt == "logout":
-        pass
+        status, username = modules.login_user()
+        if status:
+            AUTHENTICATED = True
+            USER = username
     elif prompt == "change":
-        pass
+        status = modules.change_user_password()
+        if status:
+            AUTHENTICATED = True
     else:
         print("> Invalid request!")
 
 def main():
-    while not AUTHENTICATED:
-        prompt = input("> Command: ")
-        manage_user(prompt)
+    global AUTHENTICATED, USER
+
+    app_run = True
+    while app_run:
+
+        while not AUTHENTICATED:
+            prompt = input("> Command: ")
+            manage_user(prompt)
+
+        prompt = input(f"> Command ({USER}): ")
+        if prompt == "logout":
+            AUTHENTICATED = False
+            USER = ""
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 import json
 
-def clear_users():
+def clear_all_users():
     try:
         default = {"users": {"admin": {"password": "123"}}}
         users_file_write = open('./db/users.json', 'w')
@@ -10,4 +10,4 @@ def clear_users():
     except:
         print("> Error clearing user database!")
 
-clear_users()
+clear_all_users()
