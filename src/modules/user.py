@@ -1,63 +1,74 @@
 import json
 
-users_file = open('./db/users.json')
-users = json.load(users_file)
+class User:
+    def __init__(self) -> None:
+        # file
+        self.users_file = open('./db/users.json')
+        self.users = json.load(self.users_file)
+        # user
+        self.username = ""
+        self.password = ""
+        self.is_authenticated = False
 
-def create_user() -> tuple:
+    def create_user(self) -> bool:
 
-    username = input("> Username: ").lower()
-    if username in users['users']:
-        print(f"Username \"{username}\" is taken! Please provide a new one.")
-        return (False, None)
+        username = input("> Username: ").lower().strip()
+        if username in self.users['users']:
+            return None
 
-    password = input("> Password: ")
-
-    try:
-        users['users'][username] = {"password": password}
-        users_file_write = open('./db/users.json', 'w')
-        json.dump(users, users_file_write)
-
-        print(f"Welcome {username}! You have been added to the database!")
-        return (True, username)
-    except:
-        print("Error creating user! Try again")
-        return (False, None)
-
-def login_user() -> tuple:
-    
-    username = input("> Username: ").lower()
-    if username not in users['users']:
-        print(f"Username \"{username}\" does not exist! Please provide a new one.")
-        return (False, None)
-
-    password = input("> Password: ")
-
-    try:
-        if users['users'][username]["password"] == password:
-            print(f"Welcome {username}!")
-            return (True, username)
-        else:
-            print(f"Incorrect password for {username}")
-            return (False, None)
-    except:
-        print("Error logging in! Try again")
-        return (False, None)
-
-def change_user_password(username: str):
-
-    new_password = input("> New Password: ")
-    if input("> Confirm Password: ") == new_password:
+        password = input("> Password: ").strip()
 
         try:
-            users['users'][username] = {"password": new_password}
+            self.users['users'][username] = {
+                "password": password,
+                "news": {},
+                "stocks": {}
+            }
             users_file_write = open('./db/users.json', 'w')
-            json.dump(users, users_file_write)
+            json.dump(self.users, users_file_write)
 
-            print("Password successfully changed!")
+            self.username = username
+            self.password = password
+            self.is_authenticated = True
+
             return True
         except:
-            print("Error saving your new password!")
+            print("Error creating user! Try again")
             return False
-    else:
-        print("Your passwords do not match!")
-        return False
+
+    def login_user(self) -> bool:
+        
+        username = input("> Username: ").lower().strip()
+        if username not in self.users['users']:
+            return None
+
+        password = input("> Password: ").strip()
+
+        try:
+            if self.users['users'][username]["password"] == password:
+                self.username = username
+                self.password = password
+                self.is_authenticated = True
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def change_user_password(self):
+
+        new_password = input("> New Password: ").strip()
+        if input("> Confirm Password: ").strip() == new_password:
+
+            try:
+                self.users['users'][self.username] = {"password": new_password}
+                users_file_write = open('./db/users.json', 'w')
+                json.dump(self.users, users_file_write)
+
+                self.password = new_password
+
+                return True
+            except:
+                return None
+        else:
+            return False

@@ -1,1 +1,1 @@
-{"users": {"admin": {"password": "123"}}}
+{"users": {"admin": {"password": "123", "news": {"saved-articles": ""}, "stocks": {"watch-list": ["tsl"]}}, "jonah": {"password": "Lysne"}}}
