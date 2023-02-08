@@ -1,2 +1,2 @@
-from modules.news import *
 from modules.user import *
+from modules.news import *
