@@ -97,6 +97,7 @@ class Fox:
         bs_parser = bs(homepage_content, 'html.parser')
         articles = set(bs_parser.find_all("article", {"class": lambda x: x and "article story" in x.split("-")}))
 
+        print("Fetching recent articles from Fox New's...")
         for article in tqdm(articles, bar_format='{l_bar}{bar:10}{r_bar}{bar:-10b}'):
             try:
                 # scrapes the article's URL from each artile class
@@ -117,13 +118,10 @@ class Fox:
         r = requests.get(self.homepage)
 
         if r.status_code == 200:
-            try:
-                homepage_content = r.text
-                self.parse_homepage(homepage_content)
+            homepage_content = r.text
+            self.parse_homepage(homepage_content)
 
-                # fetching and storing articles on the homepage is a success
-                return True
-            except:
-                return False
+            # fetching and storing articles on the homepage is a success
+            return True
         else:
             return False
